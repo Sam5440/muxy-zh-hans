@@ -1,0 +1,28 @@
+name: validate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: muxy-zh-hans
+      - uses: actions/checkout@v4
+        with:
+          repository: muxy-app/muxy
+          path: muxy
+          depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate language pack
+        run: python3 muxy-zh-hans/scripts/validate.py
+      - name: Build
+        run: node muxy-zh-hans/scripts/build.mjs
